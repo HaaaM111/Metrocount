@@ -273,13 +273,21 @@ segments.forEach((seg, si) => {
     const sLen = nearestLenOnPath(p, startC);
     const eLen = nearestLenOnPath(p, endC);
     if (sLen == null || eLen == null) return;       // 这段 path 不经过这两个站
-    const [a, b] = sLen < eLen ? [sLen, eLen] : [eLen, sLen];
+    let a = sLen < eLen ? sLen : eLen;
+    let b = sLen < eLen ? eLen : sLen;
+    const forward = b - a;
+    const backward = total - forward;
 
-    const clone = p.cloneNode();
+    const clone = p.cloneNode(true);
     clone.style.opacity = '1';
     clone.setAttribute('stroke-width', '12');
-    clone.style.strokeDasharray  = `${b - a} ${total}`;
-    clone.style.strokeDashoffset = String(-a);
+    if(backward < forward){
+      clone.style.strokeDasharray = `${backward} ${forward}`;
+      clone.style.strokeDashoffset = `${-b}`;
+    }else{
+      clone.style.strokeDasharray = `${forward} ${backward}`;
+      clone.style.strokeDashoffset = `${-a}`;
+    }
     g.appendChild(clone);
   });
 

@@ -1,22 +1,26 @@
-:root{
-  --bg:#eef1f6;--panel:#ffffff;--border:#e3e8f0;--text:#1c2430;--muted:#6b7480;
-  --blue:#1e6fff;--blue-soft:#eaf2ff;--blue-border:#c9dcff;
-  --header-from:#16233f;--header-to:#274a7c;
-  --shadow-sm:0 1px 2px rgba(16,24,40,.05);
-  --shadow-md:0 6px 18px rgba(16,24,40,.07);
-  --radius:12px;--radius-sm:8px;
+:root {
+  --bg: #fafaf7;
+  --card: #ffffff;
+  --text: #1a1a1a;
+  --muted: #888;
+  --border: #e0e0e0;
+  --blue: #1a1a1a;
+  --radius: 0;
+  --radius-sm: 0;
+  --shadow-sm: none;
 }
+
 *{box-sizing:border-box}
 html{-webkit-font-smoothing:antialiased}
 body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}
 .container{width:min(900px,calc(100% - 40px));margin:0 auto}
-.site-header{height:64px;background:linear-gradient(120deg,var(--header-from),var(--header-to));color:#fff;box-shadow:0 2px 10px rgba(16,24,40,.18)}
+.site-header{height:64px;background:#ffffff;color:#1a1a1a;border-bottom:2px solid #1a1a1a;box-shadow:none}
 .header-inner{height:100%;display:flex;align-items:center;justify-content:space-between}
 .brand{font-weight:700;font-size:18px;display:flex;align-items:center;gap:11px;letter-spacing:.01em}
-.brand-mark{display:grid;place-items:center;width:30px;height:30px;background:linear-gradient(135deg,#4f8cff,#1e6fff);border-radius:9px;font-weight:800;font-size:16px;color:#fff;box-shadow:0 2px 6px rgba(30,111,255,.45)}
+.brand-mark{display:grid;place-items:center;width:30px;height:30px;background:#1a1a1a;border-radius:0;font-weight:800;font-size:16px;color:#fff}
 .site-header nav{display:flex;gap:6px}
-.site-header nav a{color:#c9d6ee;text-decoration:none;padding:7px 14px;border-radius:8px;font-size:13.5px;font-weight:500;transition:background .15s,color .15s}
-.site-header nav a:hover{background:rgba(255,255,255,.12);color:#fff}
+.site-header nav a{color:#1a1a1a;text-decoration:none;padding:7px 14px;border-radius:0;font-size:13.5px;font-weight:500}
+.site-header nav a:hover{background:#f0f0f0;color:#1a1a1a}
 .page-grid{padding:42px 0 30px}
 .intro{margin-bottom:24px}
 .eyebrow{color:var(--blue);font-size:12px;font-weight:700;letter-spacing:.1em;margin:0 0 10px}
