@@ -32,7 +32,7 @@ class Station(models.Model):
         verbose_name_plural = '地铁站点'
 
     def __str__(self):
-        return f'{self.name}（{self.line.name}）'
+        return f'{self.name}({self.line.name})'
 
 
 class Edge(models.Model):

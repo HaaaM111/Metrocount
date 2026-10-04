@@ -1,0 +1,104 @@
+{% load static %}
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>地铁图选站 · MetroCount</title>
+  <link rel="stylesheet" href="{% static 'subway/style.css' %}?v=26">
+  <style>
+    html, body { height: 100%; margin: 0; overflow: hidden; background: #f5f6f8; }
+    body.map-page { display: flex; flex-direction: column; }
+    .map-topbar {
+      flex: 0 0 auto; display: flex; align-items: center; gap: 16px;
+      padding: 10px 16px; background: #fff; border-bottom: 1px solid #e4e6eb; z-index: 10;
+    }
+    .map-topbar .back-btn {
+      text-decoration: none; color: #1f2328; font-weight: 600;
+      padding: 6px 12px; border-radius: 6px; background: #f0f1f3;
+    }
+    .map-topbar .back-btn:hover { background: #e4e6eb; }
+    .map-hint { flex: 1; color: #57606a; font-size: 14px; }
+    .map-tools { display: flex; gap: 6px; align-items: center; }
+    .map-tools button {
+      height: 34px; padding: 0 14px; border: 1px solid #d0d7de; background: #fff;
+      border-radius: 6px; cursor: pointer; font-size: 14px; white-space: nowrap;
+    }
+    .map-tools button:hover { background: #f0f1f3; }
+    .map-wrap {
+      flex: 1 1 auto; position: relative; overflow: auto; background: #fff;
+    }
+    .map-wrap svg { display: block; }
+    .map-float {
+      position: fixed; right: 20px; bottom: 20px; width: 360px; max-width: calc(100vw - 40px);
+      background: #fff; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,.18);
+      z-index: 20; overflow: hidden;
+    }
+    .map-float .float-empty {
+      padding: 20px; color: #8b949e; font-size: 14px; text-align: center;
+    }
+    .float-card-inner { padding: 16px; }
+    .float-head { display: flex; align-items: baseline; gap: 10px; }
+    .float-fare { font-size: 28px; font-weight: 700; color: #d53940; }
+    .float-meta { color: #57606a; font-size: 13px; }
+    .float-route { margin-top: 6px; font-size: 15px; font-weight: 600; color: #1f2328; }
+    .float-segs { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }
+    .float-segs .seg {
+      display: flex; align-items: center; gap: 8px; font-size: 13px;
+      padding: 6px 8px; background: #f6f8fa; border-radius: 6px;
+    }
+    .float-segs .seg-line {
+      padding: 2px 8px; border-radius: 4px; font-size: 12px; white-space: nowrap;
+    }
+    .float-segs .seg-route { flex: 1; color: #1f2328; }
+    .float-segs .seg-stops { color: #8b949e; font-size: 12px; }
+    .map-float details.alt-plan { margin-top: 10px; font-size: 13px; }
+    .map-float details.alt-plan summary { cursor: pointer; color: #57606a; }
+    .float-ball {
+      display: none; width: 56px; height: 56px; border-radius: 50%;
+      background: linear-gradient(135deg, #2A5F7C, #4795D4); color: #fff;
+      align-items: center; justify-content: center; font-size: 22px; font-weight: 700;
+      cursor: pointer; box-shadow: 0 4px 16px rgba(42,95,124,.4);
+      user-select: none;
+    }
+    .map-float.minimized {
+      width: 56px !important; height: 56px !important; padding: 0 !important;
+      border-radius: 50% !important;
+    }
+    .map-float.minimized .float-ball { display: flex; }
+    .map-float.minimized .float-body { display: none; }
+    .float-body { position: relative; }
+    .float-close {
+      position: absolute; top: 6px; right: 8px; background: none; border: none;
+      font-size: 18px; cursor: pointer; color: #8b949e; line-height: 1; padding: 4px;
+    }
+    .float-close:hover { color: #1f2328; }
+    .float-content { padding: 16px; }
+    .map-float.minimized .float-content { padding: 0; }
+  </style>
+</head>
+<body class="map-page">
+  <div class="map-topbar">
+    <a href="/" id="map-back" class="back-btn">← 返回首页</a>
+    <span id="map-hint" class="map-hint">点击站点：第一次=起点，第二次=终点</span>
+    <div class="map-tools">
+      <button id="map-fit" title="回到市中心">回中心</button>
+    </div>
+  </div>
+  <div class="map-wrap">
+    {% include 'subway/_map_svg.html' %}
+  </div>
+  <div id="map-result" class="map-float minimized">
+  <div class="float-ball" title="展开">M</div>
+  <div class="float-body">
+    <button class="float-close" title="收起">×</button>
+    <div class="float-content"><div class="float-empty">请在地图上选择起点和终点</div></div>
+  </div>
+</div>
+
+  {{ groups|json_script:"groups-data" }}
+  {{ search_data|json_script:"search-data" }}
+  <script src="{% static 'subway/map-core.js' %}?v=2"></script>
+  <script src="{% static 'subway/map.js' %}?v=2"></script>
+</body>
+</html>

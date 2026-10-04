@@ -316,12 +316,10 @@ def get_graph(include_maglev=False, include_airport=True):
     return _GRAPH_CACHE[key]  # (adj_km, adj_min, edge_meta)
 
 
-def index(request):
+def build_context():
     lines = [l for l in Line.objects.prefetch_related('stations').all()
              if l.name != '换乘']
     lines.sort(key=lambda l: int(l.code) if l.code.isdigit() else 999)
-
-    # Baidu-map colors so legend matches the on-page SVG network map
     BAIDU_COLORS = {
         '1号线': '#D53940', '2号线': '#7FBE29', '3号线': '#F5D503', '4号线': '#3F267F',
         '5号线': '#885196', '6号线': '#C32A67', '7号线': '#DD762E', '8号线': '#4795D4',
@@ -332,17 +330,12 @@ def index(request):
     }
     for l in lines:
         l.baidu_color = BAIDU_COLORS.get(l.name, l.color)
-
-    # name -> {line_name: station_id}, line_name -> ordered stations
     name_lines_ids = defaultdict(dict)
     line_stations = defaultdict(list)
     for line in lines:
         for station in line.stations.all():
             name_lines_ids[station.name][line.name] = station.id
             line_stations[line.name].append(station)
-
-    # Select options grouped by line (二级目录). Transfer stations appear under
-    # every line they serve, annotated with the other lines (换乘标注).
     groups = []
     for line in lines:
         opts = []
@@ -354,17 +347,21 @@ def index(request):
                 label = st.name
             opts.append({'id': st.id, 'label': label})
         groups.append({'line': line.name, 'color': line.baidu_color, 'stations': opts})
-
-    # Search index: name -> lines & per-line ids
     search_data = [
         {'name': name, 'lines': list(d.keys()), 'ids': {l: d[l] for l in d}}
         for name, d in name_lines_ids.items()
     ]
     search_data.sort(key=lambda x: x['name'])
+    return {'lines': lines, 'groups': groups, 'search_data': search_data}
 
-    return render(request, 'subway/index.html', {
-        'lines': lines, 'groups': groups, 'search_data': search_data,
-    })
+
+def index(request):
+    return render(request, 'subway/index.html', build_context())
+
+
+def map_view(request):
+    return render(request, 'subway/map.html', build_context())
+
 
 
 def build_trip_plan(origin, dest_id, prev, edge_meta):
