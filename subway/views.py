@@ -365,7 +365,10 @@ def build_trip_plan(origin, dest_id, prev, edge_meta):
         guard += 1
         if guard > 3000:
             break
-        path_ids.append(prev[path_ids[-1]])
+        nxt = prev.get(path_ids[-1])
+        if nxt is None:
+            break
+        path_ids.append(nxt)
     path_ids.reverse()
 
     name_map = {s.id: s.name for s in Station.objects.filter(pk__in=path_ids)}
@@ -478,7 +481,10 @@ def build_airport_alt(origin, dest, main_minutes, origin_group=(), dest_group=()
         guard += 1
         if guard > 3000:
             break
-        path_ids.append(prev[path_ids[-1]])
+        nxt = prev.get(path_ids[-1])
+        if nxt is None:
+            break
+        path_ids.append(nxt)
     path_ids.reverse()
     lines_on_path = {edge_meta.get((u, v), ('', 0, 0))[0]
                      for u, v in zip(path_ids, path_ids[1:])}

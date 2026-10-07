@@ -52,12 +52,17 @@ try:
 except urllib.error.HTTPError as e:
     print('参数校验: 非数字返回', e.code, '(GOOD)')
 
-# admin 路由应不可访问
-try:
-    urllib.request.urlopen('http://127.0.0.1:8000/admin/', timeout=10)
-    print('admin: 仍可访问 (BAD)')
-except urllib.error.HTTPError as e:
-    print('admin: 返回', e.code, '(GOOD)')
+# admin 路由：后台存在但未登录必须重定向到登录页（302），不允许未授权直接访问
+import http.client
+_conn = http.client.HTTPConnection('127.0.0.1', 8000)
+_conn.request('GET', '/admin/')
+_resp = _conn.getresponse()
+_loc = _resp.getheader('Location', '')
+if _resp.status == 302 and '/admin/login/' in _loc:
+    print('admin: 未登录重定向到登录页 (GOOD)')
+else:
+    print(f'admin: 状态 {_resp.status} (BAD)')
+_conn.close()
 
 # 首页 200
 try:

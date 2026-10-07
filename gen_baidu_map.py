@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Generate Baidu-style Shanghai metro SVG (v2, path-assigned station colors).
-- 25 line paths verbatim from Baidu
-- 432 stations: color = its nearest path's Baidu color; transfer = white ring
+- 24 line paths verbatim from Baidu (金山铁路已剔除)
+- 424 stations: color = its nearest path's color (官方色); transfer = white ring
 - labels verbatim from Baidu SVG
 
 说明：
@@ -64,12 +64,12 @@ print('major hub stations:', len(major_hub_names), sorted(major_hub_names))
 
 # 百度线路色 -> 线路简称（#800000 为 11 号线支线着色，同标 11）
 BAIDU_COLOR_TO_SHORT = {
-    '#D53940': '1', '#7FBE29': '2', '#F5D503': '3', '#3F267F': '4',
-    '#885196': '5', '#C32A67': '6', '#DD762E': '7', '#4795D4': '8',
-    '#94C7E9': '9', '#C0B2D2': '10', '#7C343C': '11', '#800000': '11',
-    '#327660': '12', '#DA9DBE': '13', '#615E38': '14', '#C3B292': '15',
-    '#A4CEC0': '16', '#AC7A70': '17', '#B58A57': '18', '#A39892': '浦江',
-    '#B3B3B3': '磁浮', '#2A5F7C': '机场',
+    '#E6002A': '1', '#8CC220': '2', '#FCD600': '3', '#461D84': '4',
+    '#944D9A': '5', '#D40068': '6', '#ED6F00': '7', '#0095D9': '8',
+    '#87CAED': '9', '#C6AFD4': '10', '#871C2B': '11',
+    '#007A60': '12', '#E999C0': '13', '#616020': '14', '#C8B38E': '15',
+    '#98D1C0': '16', '#B7766C': '17', '#C09453': '18', '#898989': '浦江',
+    '#B3B3B3': '磁浮', '#B9E3F9': '机场',
 }
 
 # 解析 SVG path 的 d 属性，将一段连续的 M/L/Q/C/S 命令转成离散点序列，
@@ -322,12 +322,17 @@ def point_at_arc(poly, target):
         acc += seg
     return poly[-1]
 
+# 11号线主/支线同为官方酒红色，两条都放徽章；其余同色多段只取最长一条
+MULTI_BADGE_COLORS = {'#871C2B'}
 best_poly_by_color = {}
 for p, poly in zip(paths, polys):
     L = poly_length(poly)
-    cur = best_poly_by_color.get(p['stroke'])
-    if cur is None or L > cur[0]:
-        best_poly_by_color[p['stroke']] = (L, poly)
+    if p['stroke'] in MULTI_BADGE_COLORS:
+        best_poly_by_color.setdefault(p['stroke'], []).append((L, poly))
+    else:
+        cur = best_poly_by_color.get(p['stroke'])
+        if cur is None or L > cur[0][0]:
+            best_poly_by_color[p['stroke']] = [(L, poly)]
 
 # 枢纽坐标，徽章选位时避让
 hub_pts = [(st['x'], st['y']) for st in stations if st['t'] in hub_names]
@@ -344,16 +349,17 @@ def choose_badge_point(poly, L, cand_ts):
             best_score, best_pt = score, pt
     return best_pt
 
-for color, (L, poly) in best_poly_by_color.items():
+for color, items in best_poly_by_color.items():
     short = BAIDU_COLOR_TO_SHORT.get(color)
     if not short:
         continue
-    # 长线两端区域各一枚，短线只在中部一枚
-    slot_list = ([0.15, 0.22, 0.30], [0.70, 0.78, 0.85]) if L >= 3000 else ([0.30, 0.50, 0.70],)
-    for cands in slot_list:
-        bx, by = choose_badge_point(poly, L, cands)
-        placed_badges.append((bx, by))
-        out.append(
+    for L, poly in items:
+        # 长线两端区域各一枚，短线只在中部一枚
+        slot_list = ([0.15, 0.22, 0.30], [0.70, 0.78, 0.85]) if L >= 3000 else ([0.30, 0.50, 0.70],)
+        for cands in slot_list:
+            bx, by = choose_badge_point(poly, L, cands)
+            placed_badges.append((bx, by))
+            out.append(
             f'<g class="line-badge" pointer-events="none">'
             f'<circle cx="{bx:.1f}" cy="{by:.1f}" r="17" fill="{color}" stroke="#ffffff" stroke-width="3"/>'
             f'<text class="badge-text" x="{bx:.1f}" y="{by+1:.1f}" font-size="20" font-weight="700"'
