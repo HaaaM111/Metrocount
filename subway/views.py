@@ -320,16 +320,9 @@ def build_context():
     lines = [l for l in Line.objects.prefetch_related('stations').all()
              if l.name != '换乘']
     lines.sort(key=lambda l: int(l.code) if l.code.isdigit() else 999)
-    BAIDU_COLORS = {
-        '1号线': '#D53940', '2号线': '#7FBE29', '3号线': '#F5D503', '4号线': '#3F267F',
-        '5号线': '#885196', '6号线': '#C32A67', '7号线': '#DD762E', '8号线': '#4795D4',
-        '9号线': '#94C7E9', '10号线': '#C0B2D2', '11号线': '#7C343C', '12号线': '#327660',
-        '13号线': '#DA9DBE', '14号线': '#615E38', '15号线': '#C3B292', '16号线': '#A4CEC0',
-        '17号线': '#AC7A70', '18号线': '#B58A57', '浦江线': '#A39892', '市域机场线': '#2A5F7C',
-        '磁悬浮': '#B3B3B3',
-    }
+    # 线路颜色统一使用 DB 中的上海地铁官方色（SVG 地图/图例/方案卡片同源）
     for l in lines:
-        l.baidu_color = BAIDU_COLORS.get(l.name, l.color)
+        l.baidu_color = l.color
     name_lines_ids = defaultdict(dict)
     line_stations = defaultdict(list)
     for line in lines:
