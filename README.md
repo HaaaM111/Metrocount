@@ -19,7 +19,7 @@
 
 - 后端：Django 4.2 + SQLite
 - 前端：原生 HTML / CSS / JavaScript，内联 SVG 地图
-- 数据：532 个站点记录 / 22 条线路记录（21 条运营线 + 虚拟换乘线）/ 660 条边（含 142 条同站换乘边）/ 实测站间距 / 官方票价规则
+- 数据：532 个站点记录 / 22 条线路记录（21 条运营线 + 虚拟换乘线）/ 1320 条边（含 290 条同站换乘边）/ 实测站间距 / 官方票价规则
 
 ## 目录结构
 
@@ -40,10 +40,11 @@ metrocount/
 │   ├── map.js                 # 全屏选站页逻辑（浮动卡片/悬浮球）
 │   ├── style.css
 │   └── maps/shmetro-map.svg   # 整网 SVG 地图源文件
+├── import_network.py           # 数据更新管线（--dump / 幂等更新 / --dry-run / --verify）
 ├── gen_baidu_map.py           # SVG 地图生成器
 ├── inline_svg.py              # 将 SVG 重新内联进 _map_svg.html
 ├── verify_airport.py          # 机场线票价基线回归测试
-├── verify_alternatives.py     # 全站备选路径回归测试（5551 OD / 1859 备选）
+├── verify_alternatives.py     # 全站备选路径回归测试（5620 OD / 1742 备选）
 └── smoke_test.py              # 关键 OD 与安全项冒烟测试
 ```
 
@@ -80,7 +81,7 @@ cd D:\metrocount
 
 ```powershell
 .\.venv\Scripts\python.exe verify_airport.py       # 机场线 21 项 + 普通 7 锚点
-.\.venv\Scripts\python.exe verify_alternatives.py    # 全站 5620 OD / 1880 备选
+.\.venv\Scripts\python.exe verify_alternatives.py    # 全站 5620 OD / 1742 备选
 .\.venv\Scripts\python.exe smoke_test.py              # 关键 OD + 安全项冒烟
 ```
 
