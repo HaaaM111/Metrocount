@@ -5,13 +5,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>MetroCount · 上海地铁计价系统</title>
-  <link rel="stylesheet" href="{% static 'subway/style.css' %}?v=26">
+  <link rel="stylesheet" href="{% static 'subway/style.css' %}?v=30">
 </head>
 <body>
   <header class="site-header">
     <div class="container header-inner">
-      <div class="brand"><span class="brand-mark">M</span><span>MetroCount</span></div>
-      <nav><a href="#fares">票价查询</a><a href="/admin/">数据管理</a></nav>
+      <div class="brand"><span>MetroCount</span></div>
     </div>
   </header>
   <main class="container page-grid">
@@ -64,10 +63,18 @@
           <option value="">请选择终点</option>
         </select>
       </div>
-      <button id="reset-button" class="button secondary" type="button">重置</button>
+      <div id="quick-routes" class="quick-routes" hidden></div>
+      <div class="toolbar-actions">
+        <button id="swap-button" class="button secondary" type="button" title="互换起点与终点" disabled>⇄ 互换</button>
+        <button id="reset-button" class="button secondary" type="button">重置</button>
+      </div>
     </section>
     <section id="fares" class="panel fares-panel">
-      <div class="panel-heading"><div><span class="status-dot"></span><strong>行程票价</strong></div><span id="result-count" class="muted">请选择起点和终点</span></div>
+      <div class="panel-heading"><div><span class="status-dot"></span><strong>票价查询</strong></div><span id="result-count" class="muted">请选择起点和终点</span></div>
+      <div class="fares-tabs">
+        <button type="button" class="tab-btn active" id="tab-trip">行程票价</button>
+        <button type="button" class="tab-btn" id="tab-table">票价表</button>
+      </div>
 <div id="fare-results" class="fare-results empty-state">选择起点和终点后，显示参考票价与乘坐方案。</div>
     </section>
     <section class="legend-panel panel">
@@ -82,7 +89,7 @@
   {{ groups|json_script:"groups-data" }}
   {{ search_data|json_script:"search-data" }}
   <script src="{% static 'subway/map-core.js' %}?v=2"></script>
-  <script src="{% static 'subway/app.js' %}?v=36"></script>
+  <script src="{% static 'subway/app.js' %}?v=39"></script>
 </body>
 </html>
 

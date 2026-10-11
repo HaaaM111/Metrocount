@@ -14,13 +14,25 @@
 html{-webkit-font-smoothing:antialiased}
 body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}
 .container{width:min(900px,calc(100% - 40px));margin:0 auto}
-.site-header{height:64px;background:#ffffff;color:#1a1a1a;border-bottom:2px solid #1a1a1a;box-shadow:none}
+.site-header{height:52px;background:#ffffff;color:#1a1a1a;border-bottom:2px solid #1a1a1a;box-shadow:none;position:relative;z-index:5}
+/* 地铁主题渐变线：header 黑边下方 4px 线路色条 */
+.site-header::after{
+  content:"";position:absolute;left:0;right:0;bottom:-6px;height:4px;
+  background:linear-gradient(90deg,#d53940 0 25%,#7ac143 25% 50%,#f5c518 50% 75%,#1677ff 75% 100%);
+}
 .header-inner{height:100%;display:flex;align-items:center;justify-content:space-between}
-.brand{font-weight:700;font-size:18px;display:flex;align-items:center;gap:11px;letter-spacing:.01em}
+.brand{font-weight:800;font-size:20px;display:flex;align-items:center;gap:11px;letter-spacing:.01em}
 .brand-mark{display:grid;place-items:center;width:30px;height:30px;background:#1a1a1a;border-radius:0;font-weight:800;font-size:16px;color:#fff}
-.site-header nav{display:flex;gap:6px}
-.site-header nav a{color:#1a1a1a;text-decoration:none;padding:7px 14px;border-radius:0;font-size:13.5px;font-weight:500;border:1px solid transparent}
-.site-header nav a:hover{background:#f0f0f0;border-color:#1a1a1a;color:#1a1a1a}
+.site-header nav{display:flex;gap:8px;align-items:center}
+.site-header nav a{
+  display:inline-flex;align-items:center;height:34px;padding:0 16px;
+  border:1.5px solid #1a1a1a;border-radius:4px;
+  font-size:13px;font-weight:600;text-decoration:none;color:#1a1a1a;
+  background:#fff;letter-spacing:.02em;transition:all .15s;
+}
+.site-header nav a:hover{background:#1a1a1a;color:#fff}
+.site-header nav a.primary{background:#1a1a1a;color:#fff}
+.site-header nav a.primary:hover{background:#333;border-color:#333}
 .page-grid{padding:42px 0 30px}
 .intro{margin-bottom:24px}
 .eyebrow{color:#1a1a1a;font-size:11px;font-weight:700;letter-spacing:.15em;margin:0 0 10px;text-transform:uppercase}
@@ -203,3 +215,63 @@ body{display:flex;flex-direction:column;overflow:hidden}
   #fare-results,.fare-grid{overflow:visible;max-height:none}
   .footer{display:block}
 }
+
+/* ===== 工具栏操作区（互换/重置）===== */
+.toolbar-actions{display:flex;gap:8px;margin-left:auto}
+#swap-button:disabled{opacity:.4;cursor:not-allowed;background:#fff;color:#888}
+#swap-button:disabled:hover{background:#fff;color:#888}
+
+/* ===== 结果区 Tab（行程票价 / 票价表）===== */
+.fares-tabs{display:flex;gap:0;border-bottom:2px solid #1a1a1a;padding:0 16px;background:#fff}
+.tab-btn{
+  height:36px;padding:0 16px;border:none;background:none;cursor:pointer;
+  font:600 13px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  color:#888;border-bottom:3px solid transparent;margin-bottom:-2px;letter-spacing:.03em;
+}
+.tab-btn:hover{color:#1a1a1a}
+.tab-btn.active{color:#1a1a1a;border-bottom-color:#1a1a1a}
+
+/* ===== 票价表 ===== */
+.fare-table-view{padding:12px 16px 16px}
+.fare-table-wrap{max-height:52vh;overflow:auto;border:1px solid #1a1a1a;background:#fff}
+.fare-table{width:100%;border-collapse:collapse;font-size:13px}
+.fare-table th,.fare-table td{border:1px solid #e0e0e0;padding:6px 10px;text-align:left;white-space:nowrap}
+.fare-table th{
+  background:#f6f8fa;font-weight:700;cursor:pointer;user-select:none;position:sticky;top:0;z-index:1;
+}
+.fare-table th:hover{background:#eef1f4}
+.fare-table tbody tr{cursor:pointer}
+.fare-table tbody tr:hover{background:#f0f5f1}
+.fare-table .ft-name{font-weight:600}
+.fare-table .ft-line{color:var(--muted);font-size:12px}
+
+/* ===== 快捷路线 chips（常用 / 最近）===== */
+.quick-routes{
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px;flex-basis:100%;
+  margin-top:2px;padding:8px 0 2px;border-top:1px dashed #e0e0e0;
+}
+.qr-label{font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.05em;margin-right:2px}
+.qr-chip{display:inline-flex;align-items:center;border:1px solid #999;background:#fff;max-width:100%}
+.qr-chip:hover{border-color:#1a1a1a}
+.qr-main{
+  background:none;border:none;padding:4px 10px;cursor:pointer;
+  font:500 12px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  color:#1a1a1a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:280px;
+}
+.qr-main:hover{text-decoration:underline}
+.qr-del{
+  background:none;border:none;padding:4px 8px;cursor:pointer;color:#888;
+  font-size:13px;line-height:1;
+}
+.qr-del:hover{color:#d53940}
+
+/* ===== 行程结果操作按钮（收藏 / 复制链接）===== */
+.trip-actions{display:flex;gap:8px;margin-top:14px;border-top:1px solid #e0e0e0;padding-top:12px}
+.mini-btn{
+  height:28px;padding:0 12px;border:1px solid #999;background:#fff;color:#1a1a1a;
+  font:600 12px/1 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  cursor:pointer;transition:all .13s;
+}
+.mini-btn:hover{background:#1a1a1a;color:#fff}
+.mini-btn.saved{border-color:#1a1a1a;background:#1a1a1a;color:#fff}
+.mini-btn.saved:hover{background:#333}
