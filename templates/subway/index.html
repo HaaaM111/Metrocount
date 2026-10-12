@@ -5,12 +5,16 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>MetroCount · 上海地铁计价系统</title>
-  <link rel="stylesheet" href="{% static 'subway/style.css' %}?v=30">
+  <link rel="stylesheet" href="{% static 'subway/style.css' %}?v=31">
 </head>
 <body>
   <header class="site-header">
     <div class="container header-inner">
       <div class="brand"><span>MetroCount</span></div>
+      <div class="header-clock" id="header-clock" aria-live="off">
+        <span class="clock-date" id="clock-date"></span>
+        <span class="clock-time" id="clock-time">--:--:--</span>
+      </div>
     </div>
   </header>
   <main class="container page-grid">
@@ -89,7 +93,7 @@
   {{ groups|json_script:"groups-data" }}
   {{ search_data|json_script:"search-data" }}
   <script src="{% static 'subway/map-core.js' %}?v=2"></script>
-  <script src="{% static 'subway/app.js' %}?v=39"></script>
+  <script src="{% static 'subway/app.js' %}?v=42"></script>
 </body>
 </html>
 

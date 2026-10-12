@@ -303,7 +303,7 @@ function recordRecent(oid, did) {
     did: String(did), dline: destinationLineSelect.value, dname: dName,
     ts: Date.now(),
   });
-  writeLS(LS_RECENT, arr.slice(0, 10));
+  writeLS(LS_RECENT, arr.slice(0, 6));
   renderQuickRoutes();
 }
 
@@ -575,4 +575,23 @@ updateSwapState();
   }
   if (oLine) setStation('origin', oLine, oid);
   if (dLine) setStation('destination', dLine, did);
+})();
+
+/* ---- 顶部实时时钟 ---- */
+(function initClock() {
+  const dateEl = document.getElementById('clock-date');
+  const timeEl = document.getElementById('clock-time');
+  if (!dateEl || !timeEl) return;
+  const pad = (n) => String(n).padStart(2, '0');
+  const fmtDate = (d) => {
+    const wk = ['日', '一', '二', '三', '四', '五', '六'][d.getDay()];
+    return `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日 周${wk}`;
+  };
+  const tick = () => {
+    const d = new Date();
+    dateEl.textContent = fmtDate(d);
+    timeEl.textContent = `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+  };
+  tick();
+  setInterval(tick, 1000);
 })();

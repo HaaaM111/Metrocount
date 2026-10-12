@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>地铁图选站 · MetroCount</title>
-  <link rel="stylesheet" href="{% static 'subway/style.css' %}?v=30">
+  <link rel="stylesheet" href="{% static 'subway/style.css' %}?v=31">
   <style>
     html, body { height: 100%; margin: 0; overflow: hidden; background: #f5f6f8; }
     body.map-page { display: flex; flex-direction: column; }
@@ -111,6 +111,6 @@
   {{ groups|json_script:"groups-data" }}
   {{ search_data|json_script:"search-data" }}
   <script src="{% static 'subway/map-core.js' %}?v=2"></script>
-  <script src="{% static 'subway/map.js' %}?v=3"></script>
+  <script src="{% static 'subway/map.js' %}?v=4"></script>
 </body>
 </html>

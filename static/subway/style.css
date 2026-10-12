@@ -22,6 +22,10 @@ body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 -apple-syste
 }
 .header-inner{height:100%;display:flex;align-items:center;justify-content:space-between}
 .brand{font-weight:800;font-size:20px;display:flex;align-items:center;gap:11px;letter-spacing:.01em}
+/* 顶部实时时钟 */
+.header-clock{display:flex;align-items:baseline;gap:10px;font-variant-numeric:tabular-nums}
+.clock-date{font-size:12px;color:#888;font-weight:600;letter-spacing:.06em;white-space:nowrap}
+.clock-time{font-size:24px;font-weight:800;color:#1a1a1a;letter-spacing:.02em;line-height:1}
 .brand-mark{display:grid;place-items:center;width:30px;height:30px;background:#1a1a1a;border-radius:0;font-weight:800;font-size:16px;color:#fff}
 .site-header nav{display:flex;gap:8px;align-items:center}
 .site-header nav a{
@@ -159,7 +163,7 @@ body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 -apple-syste
 /* ===== 全屏左右分栏 ===== */
 html,body{height:100%}
 body{display:flex;flex-direction:column;overflow:hidden}
-.site-header{flex:0 0 64px}
+.site-header{flex:0 0 52px}
 .page-grid{
   flex:1 1 auto;min-height:0;
   width:100%;max-width:none;margin:0;padding:12px;

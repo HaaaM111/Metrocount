@@ -147,7 +147,7 @@ function recordRecent(oid, did) {
     did: String(did), dline: lineOfStation(did), dname,
     ts: Date.now(),
   });
-  writeLS(LS_RECENT, arr.slice(0, 10));
+  writeLS(LS_RECENT, arr.slice(0, 6));
   renderQuickSelect();
 }
 
