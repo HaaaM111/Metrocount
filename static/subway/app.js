@@ -388,7 +388,7 @@ function setStation(side, lineName, stationId) {
   populateStations(lineSel, stSel);
   stSel.value = String(stationId);
   if (MetroMap.setPick) MetroMap.setPick(side, lineName, stationId);
-  if (side === 'origin' && currentTab === 'table') loadFareTable();
+  if (currentTab === 'table') loadFareTable();
   else loadFares();
 }
 
@@ -436,7 +436,8 @@ function resetAll() {
   closeSearch();
   MetroMap.clearPicks();
   MetroMap.clearRoute();
-  loadFares();
+  if (currentTab === 'table') loadFareTable();
+  else loadFares();
 }
 
 /* ---- search ---- */
@@ -508,7 +509,8 @@ originSelect.addEventListener('change', () => {
 });
 destinationSelect.addEventListener('change', () => {
   MetroMap.setPick('destination', destinationLineSelect.value, destinationSelect.value);
-  loadFares();
+  if (currentTab === 'table') loadFareTable();
+  else loadFares();
   updateSwapState();
 });
 
